@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BoolFlix</title>
+
+    <!-- Font Awesome 5.15.1 (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+
+    <!-- Static (v2.6.12) -->
+    <script src="libs/vue.js" charset="utf-8"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Custom JS Functions -->
+    <script src="js/functions.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <!-- VUE root element -->
+    <div id="root">
+      <header>
+        <div class="nav-container container">
+          <div class="flex-start">
+            <img src="img/photo_2020-12-04_14-17-25.jpg" alt="logo"> 
+          </div>
+          <div class="flex-end">
+            <input
+              type="text"
+              v-model="searchInput"
+              @keypress.enter="searchMovies(); searchTvShows();"
+            />
+            <button type="submit" @click="searchMovies(); searchTvShows();">
+              Search
+            </button>
+          </div>
+        </div>
+      </header>
+      <h1 v-if="movies.length > 0">Film</h1>
+      <div class="card-container container">
+        <div class="movie card" v-for="movie in movies">
+          <img
+            :src="'https://image.tmdb.org/t/p/w342/' + (movie.poster_path || movie.backdrop_path)"
+            alt="poster"
+          />
+          <!-- Info Movie on Hover -->
+          <div class="back-card">
+            <span>Titolo: {{movie.title}}</span>
+            <span>Titolo Originale: {{movie.original_title}}</span>
+            <span>Lingua: {{ movie.original_language }}</span>
+            <span
+              >Voto:
+              <!-- Stars based on Vote -->
+              <i
+                class="fas fa-star golden"
+                v-for="star in transformVote(movie.vote_average)"
+              ></i>
+              <!-- Empty Stars based on difference with Vote -->
+              <i
+                class="far fa-star"
+                v-for="star in (5 - transformVote(movie.vote_average))"
+              ></i>
+            </span>
+            <span class="overview">{{ movie.overview }}</span>
+          </div>
+        </div>
+      </div>
+      <h1 v-if="tvShows.length > 0">Serie Tv</h1>
+      <div class="card-container container">
+        <div class="show card" v-for="show in tvShows">
+          <img
+            :src="'https://image.tmdb.org/t/p/w342/' + (show.poster_path || show.backdrop_path)"
+            alt="poster"
+          />
+          <!-- Info Tv show on hover -->
+          <div class="back-card">
+            <span>Titolo: {{ show.name }}</span>
+            <span>Titolo Originale: {{ show.original_name }}</span>
+            <span>Lingua: {{ show.original_language }}</span>
+            <span
+              >Voto:
+              <i
+                class="fas fa-star golden"
+                v-for="star in transformVote(show.vote_average)"
+              ></i>
+              <!-- Empty Stars based on difference with Vote -->
+              <i
+                class="far fa-star"
+                v-for="star in (5 - transformVote(show.vote_average))"
+              ></i>
+            </span>
+            <span class="overview">{{ show.overview }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="js/main.js" charset="utf-8"></script>
+  </body>
+</html>
